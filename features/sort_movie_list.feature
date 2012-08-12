@@ -23,9 +23,13 @@ Background: movies have been added to database
 
 Scenario: sort movies alphabetically
   When I follow "Movie Title"
-  # your steps here
+  Given I check the following ratings: ratings_PG, ratings_R, ratings_PG-13, ratings_G, ratings_NC-17
+  And I press "ratings_submit"
+  Then I should see "Aladdin" before "Amelie"
 
 Scenario: sort movies in increasing order of release date
   When I follow "Release Date"
-  # your steps here
+  Given I check the following ratings: ratings_PG, ratings_R, ratings_PG-13, ratings_G, ratings_NC-17
+  And I press "ratings_submit"
+  Then I should see "1968-04-06" before "1981-06-12"
 

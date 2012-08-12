@@ -23,13 +23,40 @@ Background: movies have been added to database
   
 Scenario: restrict to movies with 'PG' or 'R' ratings
   # enter step(s) to check the 'PG' and 'R' checkboxes
+  When I check "ratings_PG"
+  And I check "ratings_R"
+  #Given I check the following ratings: ratings_PG, ratings_R, ratings_PG-13, ratings_G, ratings_NC-17
+  
   # enter step(s) to uncheck all other checkboxes
+  And I uncheck "ratings_PG-13"
+  And I uncheck "ratings_G"
+  And I uncheck "ratings_NC-17"
+  #When I uncheck the following ratings: ratings_PG-13, ratings_G, ratings_NC-17
+  
   # enter step to "submit" the search form on the homepage
+  And I press "ratings_submit"
+  
   # enter step(s) to ensure that PG and R movies are visible
+  Then I should see /PG\s+\d\d\d\d-\d\d-\d\d/
+  And I should see /R\s+\d\d\d\d-\d\d-\d\d/
+  #Then I should see all of the movies
+  
   # enter step(s) to ensure that other movies are not visible
-
+  And I should not see /PG-13\s+\d\d\d\d-\d\d-\d\d/
+  And I should not see /\sG\s+\d\d\d\d-\d\d-\d\d/
+  And I should not see /NC-17\s+\d\d\d\d-\d\d-\d\d/ 
+  
 Scenario: no ratings selected
-  # see assignment
-
+  When I uncheck the following ratings: ratings_PG, ratings_R, ratings_PG-13, ratings_G, ratings_NC-17
+  And I press "ratings_submit"
+  Then I should not see /PG-13\s+\d\d\d\d-\d\d-\d\d/
+  And I should not see /\sG\s+\d\d\d\d-\d\d-\d\d/
+  And I should not see /NC-17\s+\d\d\d\d-\d\d-\d\d/
+  And I should not see /PG\s+\d\d\d\d-\d\d-\d\d/
+  And I should not see /R\s+\d\d\d\d-\d\d-\d\d/ 
+  
 Scenario: all ratings selected
-  # see assignment
+  Given I check the following ratings: ratings_PG, ratings_R, ratings_PG-13, ratings_G, ratings_NC-17
+  And I press "ratings_submit"
+  Then I should see all of the movies
+  
